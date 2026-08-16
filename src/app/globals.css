@@ -1,26 +1,436 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@1,400&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ==========================================================================
+   BASE
+   ========================================================================== */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    user-select: none;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ==========================================================================
+   UTILITIES
+   ========================================================================== */
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.voice {
+  font-family: var(--font-voice);
+  font-style: italic;
+}
+
+/* ==========================================================================
+   EYEBROW LABEL
+   Small kicker text above section headings, e.g. "NEW ARRIVALS"
+   ========================================================================== */
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  color: var(--color-coral);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+}
+
+.eyebrow-on-dark {
+  color: var(--color-gold);
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 14px 28px;
+  border-radius: var(--radius-btn);
+  border: 2px solid transparent;
+
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--color-coral);
+  color: var(--color-paper);
+}
+
+.btn-primary:hover {
+  background: color-mix(in srgb, var(--color-coral) 85%, black);
+}
+
+.btn-dark {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.btn-dark:hover {
+  background: color-mix(in srgb, var(--color-ink) 85%, white);
+}
+
+.btn-ghost {
+  color: var(--color-paper);
+  border-color: rgba(255, 248, 240, 0.35);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-paper);
+  background: rgba(255, 248, 240, 0.1);
+}
+
+.btn-outline {
+  color: var(--color-ink);
+  border-color: var(--color-ink);
+}
+
+.btn-outline:hover {
+  background: rgba(26, 19, 48, 0.05);
+}
+
+/* ==========================================================================
+   CATEGORY SYSTEM
+   Every category owns one color across the whole site: tags, frames,
+   hover states. This is the site's organizing device — do not mix
+   category colors within a single card.
+   ========================================================================== */
+
+.cat-outerwear {
+  --cat-color: var(--color-coral);
+}
+.cat-dresses {
+  --cat-color: var(--color-violet);
+}
+.cat-accessories {
+  --cat-color: var(--color-gold);
+}
+.cat-knitwear {
+  --cat-color: var(--color-emerald);
+}
+
+.cat-tag {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 100px;
+
+  background: var(--cat-color);
+  color: var(--color-paper);
+
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   PRODUCT FRAME
+   The signature component: product photo inside a solid category-color
+   frame. Replaces the plain white card pattern.
+   ========================================================================== */
+
+.product-frame {
+  background: var(--cat-color);
+  border-radius: var(--radius-card);
+  padding: 14px;
+
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.product-frame:hover {
+  transform: translateY(-6px);
+  filter: brightness(0.94);
+}
+
+.product-frame__photo {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: calc(var(--radius-card) - 8px);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.product-frame__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.product-frame:hover .product-frame__photo img {
+  transform: scale(1.04);
+}
+
+.product-frame__body {
+  padding: 14px 4px 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--color-paper);
+}
+
+.product-frame__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.product-frame__price {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(255, 248, 240, 0.85);
+}
+
+/* ==========================================================================
+   FILTER PILLS
+   ========================================================================== */
+
+.pill {
+  padding: 7px 16px;
+  border-radius: 100px;
+  border: 2px solid var(--color-ink);
+
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pill:hover {
+  background: rgba(26, 19, 48, 0.06);
+}
+
+.pill--active {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+/* ==========================================================================
+   GLASS PANEL
+   Frosted glassmorphic surface for content sitting over full-bleed photos.
+   Heavier blur + grain + a warm glow bleeding up from the base, modeled on
+   dark "glass card" social-post references rather than a flat frosted box.
+   ========================================================================== */
+
+.glass-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--radius-panel);
+
+  background: linear-gradient(180deg, rgba(255, 248, 240, 0.1), rgba(255, 248, 240, 0.03));
+  border: 1px solid rgba(255, 248, 240, 0.14);
+
+  backdrop-filter: blur(28px) saturate(1.3);
+  -webkit-backdrop-filter: blur(28px) saturate(1.3);
+
+  box-shadow:
+    0 24px 60px -20px rgba(0, 0, 0, 0.65),
+    0 -40px 80px -50px rgba(255, 248, 240, 0.25) inset,
+    0 60px 90px -40px var(--color-coral-glow);
+}
+
+/* Subtle noise so the glass reads as textured, not a flat CSS blur */
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Warm glow anchored to the bottom edge of the panel, like light bleeding
+   up from underneath — sits behind the panel via -z-10 in markup */
+.glass-glow {
+  position: absolute;
+  left: 50%;
+  bottom: -10%;
+  width: 140%;
+  height: 60%;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, var(--color-coral-glow), transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.glass-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 999px;
+
+  background: rgba(255, 248, 240, 0.08);
+  border: 1px solid rgba(255, 248, 240, 0.16);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  color: var(--color-paper);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 13px;
+
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.glass-pill:hover {
+  background: rgba(255, 248, 240, 0.14);
+  border-color: rgba(255, 248, 240, 0.3);
+}
+
+/* ==========================================================================
+   STATS BAR
+   ========================================================================== */
+
+.stats-bar {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.stats-bar__number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 42px;
+  color: var(--color-gold);
+}
+
+.stats-bar__label {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 240, 0.7);
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   THEME
+   Tailwind v4 design tokens — generates matching utility classes
+   automatically, e.g. font-display, font-body, bg-coral, text-violet,
+   border-emerald, etc. Use these utilities directly in JSX/HTML instead
+   of hardcoding hex values or font names.
+   ========================================================================== */
+
+@theme {
+  /* Fonts
+     font-display -> Bricolage Grotesque, for H1-H4, product names, big numbers
+     font-body    -> Inter, for paragraphs, nav, UI copy
+     font-ui      -> Inter, for buttons, pills, prices, labels
+     font-voice   -> Fraunces italic, for pull quotes and editorial captions only
+  */
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-ui: "Inter", sans-serif;
+  --font-voice: "Fraunces", serif;
+
+  /* Colors — each one maps to a role, not a vibe. See design-guide.md. */
+  --color-ink: #1a1330;
+  --color-paper: #fff8f0;
+
+  --color-coral: #ff6b4a;
+  --color-violet: #6c4ab6;
+  --color-gold: #f4b740;
+  --color-emerald: #1f8a70;
+
+  --color-stone: #ded4c4;
+  --color-coral-glow: rgba(255, 107, 74, 0.35);
+
+  /* Radius scale: 6px buttons, 16px cards/frames, 28px glass panels, full pills */
+  --radius-btn: 6px;
+  --radius-card: 16px;
+  --radius-panel: 28px;
 }

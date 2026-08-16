@@ -1,14 +1,25 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Inter, Fraunces } from "next/font/google";
 import "./globals.css";
+import Footer from "../components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// 1. Load the fonts with next/font
+const bricolageGrotesque = Bricolage_Grotesque({
   subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-display", // matches the CSS variable used in @theme
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-body", // maps to Inter
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["italic"],
+  variable: "--font-voice", // maps to Fraunces italic
 });
 
 export const metadata = {
@@ -20,9 +31,19 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`
+        ${bricolageGrotesque.variable}
+        ${inter.variable}
+        ${fraunces.variable}
+        h-full antialiased
+      `}
+      // Since --font-ui also needs to be Inter, we point it to the same variable
+      style={{ "--font-ui": "var(--font-body)" }}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
