@@ -1,11 +1,16 @@
 import Link from "next/link";
 import { FOOTER } from "../data/site";
 
+const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Products", href: "/products" },
+];
+
 export default function Footer() {
   return (
     <footer className="bg-ink px-8 pb-10 pt-20 text-paper md:px-16">
       <div className="mx-auto flex max-w-6xl flex-col gap-16">
-        <div className="flex flex-col justify-between gap-12 md:flex-row">
+        <div className="flex flex-col justify-between gap-12 md:flex-row md:items-start">
           <div className="max-w-xs">
             <p className="font-display text-2xl font-bold">{FOOTER.brand}</p>
             <p className="voice mt-3 text-base text-paper/70">
@@ -28,27 +33,17 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 sm:gap-16">
-            {FOOTER.columns.map((col) => (
-              <div key={col.title}>
-                <p className="font-ui text-xs uppercase tracking-wide text-paper/50">
-                  {col.title}
-                </p>
-                <ul className="mt-4 flex flex-col gap-3">
-                  {col.links.map((link) => (
-                    <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        className="font-body text-sm text-paper/80 transition-colors hover:text-paper"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <nav className="flex gap-8 md:pt-1">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="font-ui text-sm text-paper/80 transition-colors hover:text-paper"
+              >
+                {link.label}
+              </Link>
             ))}
-          </div>
+          </nav>
         </div>
 
         <div className="flex flex-col-reverse items-start justify-between gap-4 border-t border-paper/10 pt-8 sm:flex-row sm:items-center">

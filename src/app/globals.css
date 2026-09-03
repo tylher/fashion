@@ -88,13 +88,13 @@
   color: var(--color-coral);
 }
 
-.eyebrow::before {
+/* .eyebrow::before {
   content: "";
   width: 20px;
   height: 2px;
   background: currentColor;
   border-radius: 2px;
-}
+} */
 
 .eyebrow-on-dark {
   color: var(--color-gold);

@@ -526,7 +526,7 @@ export const SIZE_GUIDE = {
 export const SHOP_CONFIG = {
   // Digits only, country code first, no + or leading zeros — e.g. Nigeria
   // number 080... becomes 234...
-  whatsappNumber: "2348012345678",
+  whatsappNumber: "2348057872464",
   currency: "$",
   pageSize: 6,
 };

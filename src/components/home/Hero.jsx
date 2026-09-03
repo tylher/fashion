@@ -116,16 +116,17 @@ export default function Hero() {
         </motion.div>
 
         {/* CTA — larger on big screens */}
-        <motion.button
+        <motion.a
           type="button"
           className="btn btn-primary w-fit text-base md:text-lg"
           initial={{ opacity: 0 }}
           animate={{ opacity: headlineDone ? 1 : 0 }}
           transition={{ duration: 0.6, delay: 0.75 }}
+          href="/products#collection"
         >
           Shop the collection
           <FiArrowRight className="text-xl" aria-hidden="true" />
-        </motion.button>
+        </motion.a>
       </div>
     </section>
   );

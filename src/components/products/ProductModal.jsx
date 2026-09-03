@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FiX, FiArrowRight, FiCheck } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { FiArrowRight, FiCheck, FiX } from "react-icons/fi";
 import { SHOP_CONFIG } from "../../data/shop";
 import { buildWhatsAppLink } from "../../lib/whatsapp";
 
@@ -48,7 +48,7 @@ export default function ProductModal({ product, onClose }) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.97 }}
         transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
-        className="relative z-10 grid max-h-[88vh] w-full max-w-3xl grid-cols-1 overflow-y-auto rounded-panel bg-paper md:grid-cols-2 md:overflow-hidden"
+        className="product-modal-scroll relative z-10 grid max-h-[88vh] w-full max-w-3xl grid-cols-1 overflow-y-auto rounded-panel bg-paper md:grid-cols-2"
       >
         <button
           type="button"
@@ -60,7 +60,7 @@ export default function ProductModal({ product, onClose }) {
         </button>
 
         {/* Gallery */}
-        <div className="relative aspect-[3/4] md:aspect-auto md:h-full">
+        <div className="relative aspect-[3/4] md:sticky md:top-0 md:aspect-auto md:h-full md:self-start">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.images[activeImage]}
@@ -161,6 +161,40 @@ export default function ProductModal({ product, onClose }) {
           </a>
         </div>
       </motion.div>
+
+      <style jsx global>{`
+        .product-modal-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(26, 19, 48, 0.35) transparent;
+        }
+        .product-modal-scroll::-webkit-scrollbar {
+          width: 8px;
+        }
+        .product-modal-scroll::-webkit-scrollbar-track {
+          background: rgba(26, 19, 48, 0.04);
+        }
+        .product-modal-scroll::-webkit-scrollbar-thumb {
+          background-color: rgba(26, 19, 48, 0.3);
+          background-image: linear-gradient(
+            180deg,
+            rgba(26, 19, 48, 0.55),
+            rgba(26, 19, 48, 0.25)
+          );
+          border-radius: 999px;
+          border: 2px solid transparent;
+          background-clip: padding-box;
+          transition: background-color 0.2s ease;
+        }
+        .product-modal-scroll::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(26, 19, 48, 0.55);
+          background-image: linear-gradient(
+            180deg,
+            rgba(26, 19, 48, 0.75),
+            rgba(26, 19, 48, 0.45)
+          );
+          background-clip: padding-box;
+        }
+      `}</style>
     </div>
   );
 }

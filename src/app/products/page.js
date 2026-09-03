@@ -1,13 +1,13 @@
-import BestsellerBanner from "@/components/products/BestSellerBanner";
+import ProductsHero from "@/components/products/ProductsHero";
 import ShopPage from "@/components/products/ShopPage";
-import SizeGuideNote from "@/components/products/SizeguideNote";
 
 const ProductsPage = () => {
   return (
     <main>
-        <ShopPage/>
-        </main>
+      <ProductsHero />
+      <ShopPage />
+    </main>
   );
-}
+};
 
 export default ProductsPage;

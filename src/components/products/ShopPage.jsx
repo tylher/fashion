@@ -1,19 +1,16 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { SHOP_PRODUCTS } from "../../data/shop";
-import { SHOP_CONFIG } from "../../data/shop";
+import { useMemo, useRef, useState } from "react";
+import { SHOP_CONFIG, SHOP_PRODUCTS } from "../../data/shop";
 import { filterAndSortProducts, paginate } from "../../lib/ShopUtils";
-import SearchBar from "./SearchBar";
-import FilterBar from "./FilterBar";
-import SizeGuideNote from "./SizeguideNote";
 import BestsellerBanner from "./BestSellerBanner";
-import ProductCard from "./productCard";
+import FilterBar from "./FilterBar";
 import Pagination from "./Pagination";
+import ProductCard from "./productCard";
 import ProductModal from "./ProductModal";
-
-
+import SearchBar from "./SearchBar";
+import SizeGuideNote from "./SizeguideNote";
 
 const DEFAULT_FILTERS = {
   category: "All",
@@ -58,7 +55,7 @@ export default function ShopPage() {
   };
 
   return (
-    <section className="bg-paper px-6 py-16 md:px-16 md:py-24">
+    <section className="bg-paper px-6 py-16 md:px-16 md:py-24" id="collection">
       <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <span className="eyebrow">Shop the collection</span>
