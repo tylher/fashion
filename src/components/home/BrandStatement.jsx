@@ -82,11 +82,11 @@ export default function BrandStatement() {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden bg-paper px-8 py-24 text-center md:pb-8 md:pt-24"
+      className="relative overflow-hidden bg-paper px-5 pt-10 pb-6 text-center md:px-8 md:pb-8 md:pt-24"
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 md:top-[65%] -z-0 -translate-x-1/2 -translate-y-1/2 select-none font-display text-[13rem] font-bold leading-none text-ink/[0.04] md:text-[35rem]"
+        className="pointer-events-none absolute left-1/2 top-[70%] md:top-[65%] -z-0 -translate-x-1/2 -translate-y-1/2 select-none font-display text-[19rem] font-bold leading-none text-ink/[0.04] md:text-[35rem]"
       >
         11
       </span>
