@@ -10,9 +10,12 @@
 // parts of the site so the hero doesn't read as a color-swatch demo.
 //
 // No eyebrow label above the headline — deliberately. The only other
-// text element (the italic caption, bottom-right) is placed apart from
-// the headline specifically so it reads as a caption about the film,
-// not a decorative label sitting on top of it.
+// text element (the italic caption) is placed apart from the headline
+// specifically so it reads as a caption about the film, not a
+// decorative label sitting on top of it. On mobile it flows in the
+// document under the CTA instead of floating at bottom-right, because
+// two independently bottom-anchored absolute blocks collide on narrow
+// screens — see note below.
 //
 // The mute toggle is the hero's second interactive element instead of a
 // redundant "watch the film" button — the background IS the film, so
@@ -107,9 +110,16 @@ export default function ProductsHero() {
         className="absolute inset-x-0 bottom-0 z-10 px-5 pb-12 sm:px-8 sm:pb-16 lg:px-14 lg:pb-20"
       >
         <div className="max-w-[900px]">
+          {/* Headline uses a single clamp() instead of a vw-size-per-breakpoint
+              ladder. Plain vw sizing grows continuously right up to a
+              breakpoint, then jumps to a different vw multiplier — on this
+              headline that meant text ballooning to ~83px just before 640px
+              wide, then visibly shrinking to ~58px past it. clamp(min, fluid,
+              max) scales smoothly the whole way and still tops out at the
+              original 6.4rem on desktop. */}
           <motion.h1
             variants={fade}
-            className="font-display text-[13vw] font-semibold leading-[0.92] tracking-[-0.02em] text-paper sm:text-[9vw] lg:text-[6.4rem]"
+            className="font-display text-[clamp(3rem,10vw,6.4rem)] font-semibold leading-[0.92] tracking-[-0.02em] text-paper"
           >
             Made for the walk.
           </motion.h1>
@@ -123,29 +133,33 @@ export default function ProductsHero() {
           </motion.p>
 
           <motion.div variants={fade} className="mt-8">
-            <a
-              href="#collection"
+            
+              <a href="#collection"
               className="group inline-flex items-center rounded-btn bg-coral px-6 py-3 font-ui text-sm font-medium text-ink transition-[background-color,box-shadow] duration-300 hover:bg-coral/90 hover:shadow-[0_0_0_6px_var(--color-coral-glow)]"
             >
               Browse the collection
             </a>
           </motion.div>
+
+          {/* EDITORIAL CAPTION — on mobile this now flows normally right
+              under the CTA instead of floating at bottom-right. Two
+              independently bottom-anchored absolute blocks (this one at
+              bottom-6/right-5, the CTA pinned via the parent's bottom-0 +
+              pb-12) land close enough on a ~375px-wide screen that their
+              boxes overlap — the button's right edge and the caption's
+              left edge cross by roughly 85px. From sm: up there's enough
+              width for both corners to coexist, so it switches back to
+              the original absolute bottom-right placement there.
+              font-voice per the theme's own comment: "for pull quotes and
+              editorial captions only." */}
+          <motion.p
+            variants={fade}
+            className="mt-6 max-w-[220px] text-left font-voice text-sm italic leading-snug text-paper/65 sm:absolute sm:bottom-8 sm:right-8 sm:mt-0 sm:max-w-[260px] sm:text-right sm:text-base"
+          >
+            Filmed backstage at the spring runway show.
+          </motion.p>
         </div>
       </motion.div>
-
-      {/* EDITORIAL CAPTION — deliberately placed apart from the headline
-          block (bottom-right vs. bottom-left) so it reads as a caption
-          about the film, not a label on the headline. font-voice per the
-          theme's own comment: "for pull quotes and editorial captions
-          only." */}
-      <motion.p
-        variants={fade}
-        initial="hidden"
-        animate="show"
-        className="absolute bottom-6 right-5 z-10 max-w-[220px] text-right font-voice text-sm italic leading-snug text-paper/65 sm:right-8 sm:bottom-8 sm:max-w-[260px] sm:text-base"
-      >
-        Filmed backstage at the spring runway show.
-      </motion.p>
 
       {/* SCROLL CUE — small, functional wayfinding toward the product
           grid below, not decoration. Respects reduced-motion. */}

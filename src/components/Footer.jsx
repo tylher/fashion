@@ -50,7 +50,7 @@ export default function Footer() {
           <span className="font-ui text-xs text-paper/50">
             {FOOTER.copyright}
           </span>
-          <div className="flex gap-6">
+          {/* <div className="flex gap-6">
             {FOOTER.legal.map((item) => (
               <Link
                 key={item.label}
@@ -60,7 +60,7 @@ export default function Footer() {
                 {item.label}
               </Link>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

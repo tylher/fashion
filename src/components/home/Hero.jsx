@@ -57,7 +57,7 @@ export default function Hero() {
   });
 
   return (
-    <section className="relative h-[92vh] min-h-[620px] w-full overflow-hidden bg-ink">
+    <section className="relative h-[100svh] min-h-[560px] w-full overflow-hidden bg-ink sm:h-[92vh] sm:min-h-[620px]">
       {/* ─── Rotating Background Images ─────────────────────────── */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -76,18 +76,20 @@ export default function Hero() {
             onLoad={() => setImageLoaded(true)}
             onError={() => setImageLoaded(true)}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/45 to-transparent" />
+          {/* Darker, top-to-bottom gradient on mobile so text sitting over a busy image stays readable;
+              side gradient takes over once there's room for it at md+ */}
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/50 to-ink/10 md:bg-gradient-to-r md:from-ink/85 md:via-ink/45 md:to-transparent" />
         </motion.div>
       </AnimatePresence>
 
       {/* ─── Content ──────────────────────────────────────────────── */}
-      <div className="relative z-10 flex h-full max-w-3xl flex-col justify-center gap-6 px-8 md:px-16">
-        <span className="eyebrow eyebrow-on-dark text-xs md:text-sm">
+      <div className="relative z-10 flex h-full max-w-3xl flex-col justify-center gap-4 px-5 sm:gap-5 sm:px-8 md:gap-6 md:px-16">
+        <span className="eyebrow eyebrow-on-dark text-[11px] sm:text-xs md:text-sm">
           Autumn collection
         </span>
 
-        {/* Bigger on larger screens */}
-        <h1 className="font-display text-4xl font-bold leading-[1.02] text-paper md:text-6xl lg:text-[95px] ">
+        {/* Scales in one more step so small phones don't jump straight to the md size */}
+        <h1 className="font-display text-3xl font-bold leading-[1.05] text-paper sm:text-4xl sm:leading-[1.02] md:text-6xl lg:text-[95px]">
           {headline}
           <span
             aria-hidden="true"
@@ -99,7 +101,7 @@ export default function Hero() {
 
         {/* Sublines — bigger and richer */}
         <motion.div
-          className="flex flex-col gap-3"
+          className="flex flex-col gap-2 sm:gap-3"
           variants={subtextGroup}
           initial="hidden"
           animate={headlineDone ? "visible" : "hidden"}
@@ -108,7 +110,7 @@ export default function Hero() {
             <motion.p
               key={line}
               variants={subtextLine}
-              className="max-w-lg font-body text-base text-paper/80 md:text-xl "
+              className="max-w-xs font-body text-sm text-paper/80 sm:max-w-lg sm:text-base md:text-xl"
             >
               {line}
             </motion.p>
@@ -118,14 +120,14 @@ export default function Hero() {
         {/* CTA — larger on big screens */}
         <motion.a
           type="button"
-          className="btn btn-primary w-fit text-base md:text-lg"
+          className="btn btn-primary w-fit text-sm sm:text-base md:text-lg"
           initial={{ opacity: 0 }}
           animate={{ opacity: headlineDone ? 1 : 0 }}
           transition={{ duration: 0.6, delay: 0.75 }}
           href="/products#collection"
         >
           Shop the collection
-          <FiArrowRight className="text-xl" aria-hidden="true" />
+          <FiArrowRight className="text-lg sm:text-xl" aria-hidden="true" />
         </motion.a>
       </div>
     </section>

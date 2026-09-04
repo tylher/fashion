@@ -1,3 +1,4 @@
+import { FaXTwitter } from "react-icons/fa6";
 import { FiInstagram, FiTwitter, FiMail } from "react-icons/fi";
 
 export const FOOTER = {
@@ -34,12 +35,12 @@ export const FOOTER = {
   ],
   socials: [
     { label: "Instagram", href: "https://instagram.com", icon: FiInstagram },
-    { label: "Twitter", href: "https://twitter.com", icon: FiTwitter },
-    { label: "Email", href: "mailto:hello@maisonveil.com", icon: FiMail },
+    { label: "Twitter", href: "https://twitter.com", icon: FaXTwitter },
+    { label: "Email", href: "mailto:info@barakhel.com", icon: FiMail },
   ],
   legal: [
     { label: "Privacy", href: "/privacy" },
     { label: "Terms", href: "/terms" },
   ],
-  copyright: `© ${new Date().getFullYear()} Maison Veil. All rights reserved.`,
+  copyright: `© ${new Date().getFullYear()} Barakhel. All rights reserved.`,
 };

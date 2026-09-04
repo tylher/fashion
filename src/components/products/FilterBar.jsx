@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiChevronDown, FiCheck } from "react-icons/fi";
 import {
@@ -11,13 +11,31 @@ import {
   SORT_OPTIONS,
 } from "../../data/shop";
 
-function Dropdown({ id, label, activeLabel, open, onToggle, children }) {
+function Dropdown({ id, label, activeLabel, open, onToggle, align = "left", children }) {
+  const rootRef = useRef(null);
+
+  // Click-outside close. onMouseLeave on the parent row only ever worked
+  // with a mouse — there's no "leave" event on touch, so on a phone a
+  // dropdown opened by tap had no way to close except picking an option.
+  // This listens for any pointer down outside this dropdown's own DOM
+  // node and closes it, covering touch and mouse alike.
+  useEffect(() => {
+    if (!open) return;
+    function handlePointerDown(e) {
+      if (rootRef.current && !rootRef.current.contains(e.target)) {
+        onToggle(null);
+      }
+    }
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [open, onToggle]);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={rootRef}>
       <button
         type="button"
         onClick={() => onToggle(open ? null : id)}
-        className={`pill flex items-center gap-1.5 ${activeLabel ? "pill--active" : ""}`}
+        className={`pill flex items-center gap-1.5 whitespace-nowrap ${activeLabel ? "pill--active" : ""}`}
       >
         {activeLabel || label}
         <motion.span
@@ -35,7 +53,14 @@ function Dropdown({ id, label, activeLabel, open, onToggle, children }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="absolute left-0 top-[calc(100%+8px)] z-30 min-w-[200px] rounded-card border border-ink/10 bg-paper p-3 shadow-xl"
+            // align="right" flips the panel to hang off the button's right
+            // edge instead of its left edge — needed for the Sort dropdown,
+            // which sits flush against the right side of the bar (ml-auto)
+            // and would otherwise render partly or fully off the right
+            // edge of the screen on mobile.
+            className={`absolute top-[calc(100%+8px)] z-30 min-w-[200px] max-w-[calc(100vw-2.5rem)] rounded-card border border-ink/10 bg-paper p-3 shadow-xl ${
+              align === "right" ? "right-0" : "left-0"
+            }`}
           >
             {children}
           </motion.div>
@@ -57,10 +82,7 @@ export default function FilterBar({ filters, onChange }) {
   )?.label;
 
   return (
-    <div
-      className="flex flex-wrap items-center gap-3 border-b border-ink/10 pb-6"
-      onMouseLeave={close}
-    >
+    <div className="flex flex-wrap items-center gap-y-3 gap-x-3 border-b border-ink/10 pb-6">
       {/* Category — sliding active pill */}
       <div className="flex flex-wrap items-center gap-2">
         {CATEGORIES.map((cat) => (
@@ -68,7 +90,7 @@ export default function FilterBar({ filters, onChange }) {
             key={cat}
             type="button"
             onClick={() => onChange({ ...filters, category: cat })}
-            className="relative rounded-full px-4 py-2 font-ui text-xs font-semibold uppercase tracking-wide"
+            className="relative whitespace-nowrap rounded-full px-4 py-2.5 font-ui text-xs font-semibold uppercase tracking-wide"
           >
             {filters.category === cat && (
               <motion.span
@@ -86,7 +108,13 @@ export default function FilterBar({ filters, onChange }) {
         ))}
       </div>
 
-      <div className="h-6 w-px bg-ink/10" />
+      {/* Divider hidden below sm. A 1px-tall vertical rule reads fine
+          sitting mid-row on a wide screen, but once the bar wraps to
+          multiple lines it can land at the very start or end of a line
+          on its own, which just looks like a stray mark rather than a
+          separator between two groups. Not worth fighting — it only
+          existed to break up a single long line in the first place. */}
+      <div className="hidden h-6 w-px sm:block bg-ink/10" />
 
       {/* Size */}
       <Dropdown
@@ -136,10 +164,10 @@ export default function FilterBar({ filters, onChange }) {
                 });
                 close();
               }}
-              className="flex items-center gap-2.5 rounded-btn px-2 py-1.5 text-left transition-colors hover:bg-ink/5"
+              className="flex items-center gap-2.5 rounded-btn px-2 py-2 text-left transition-colors hover:bg-ink/5"
             >
               <span
-                className="h-4 w-4 rounded-full border border-ink/15"
+                className="h-4 w-4 shrink-0 rounded-full border border-ink/15"
                 style={{ backgroundColor: c.hex }}
                 aria-hidden="true"
               />
@@ -169,7 +197,7 @@ export default function FilterBar({ filters, onChange }) {
                 onChange({ ...filters, priceRange: r.value });
                 close();
               }}
-              className="flex items-center justify-between rounded-btn px-2 py-1.5 text-left font-ui text-xs text-ink transition-colors hover:bg-ink/5"
+              className="flex items-center justify-between rounded-btn px-2 py-2 text-left font-ui text-xs text-ink transition-colors hover:bg-ink/5"
             >
               {r.label}
               {filters.priceRange === r.value && (
@@ -180,14 +208,17 @@ export default function FilterBar({ filters, onChange }) {
         </div>
       </Dropdown>
 
-      <div className="ml-auto">
-        {/* Sort */}
+      <div className="">
+        {/* Sort — panel aligns to the button's right edge (align="right")
+            since this dropdown sits flush against the right side of the
+            bar; see the comment on Dropdown above. */}
         <Dropdown
           id="sort"
           label="Sort"
           activeLabel={activeSortLabel !== "Newest" ? activeSortLabel : ""}
           open={openDropdown === "sort"}
           onToggle={setOpenDropdown}
+          align="right"
         >
           <div className="flex flex-col gap-1">
             {SORT_OPTIONS.map((s) => (
@@ -198,7 +229,7 @@ export default function FilterBar({ filters, onChange }) {
                   onChange({ ...filters, sort: s.value });
                   close();
                 }}
-                className="flex items-center justify-between rounded-btn px-2 py-1.5 text-left font-ui text-xs text-ink transition-colors hover:bg-ink/5"
+                className="flex items-center justify-between rounded-btn px-2 py-2 text-left font-ui text-xs text-ink transition-colors hover:bg-ink/5"
               >
                 {s.label}
                 {filters.sort === s.value && <FiCheck className="text-xs" />}
