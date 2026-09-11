@@ -48,7 +48,15 @@ export default function Footer() {
 
         <div className="flex flex-col-reverse items-start justify-between gap-4 border-t border-paper/10 pt-8 sm:flex-row sm:items-center">
           <span className="font-ui text-xs text-paper/50">
-            {FOOTER.copyright}
+              Designed by{" "}
+            
+            <a href="https://barakhel.com"
+              target="_blank"
+              rel="noreferrer"
+              className="text-paper/70 underline underline-offset-2 transition-colors hover:text-paper"
+            >
+              barakhel
+            </a>
           </span>
           {/* <div className="flex gap-6">
             {FOOTER.legal.map((item) => (
